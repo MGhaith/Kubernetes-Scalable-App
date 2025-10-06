@@ -14,3 +14,7 @@ The application (`app.py`) is a minimal Flask service that exposes a single endp
         ```bash
         flask run
         ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/MGhaith/Kubernetes-Scalable-App/blob/main/LICENSE) file for details.
