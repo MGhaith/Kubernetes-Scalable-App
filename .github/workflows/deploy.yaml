@@ -8,3 +8,20 @@ on:
           - '.gitignore'
           - '.gitattributes'
           - 'LICENSE'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ secrets.DOCKERHUB_USER }}/kubefleet:latest ./app
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+
+      - name: Push image
+        run: docker push ghcr.io/${{ secrets.DOCKERHUB_USER }}/kubefleet:latest
