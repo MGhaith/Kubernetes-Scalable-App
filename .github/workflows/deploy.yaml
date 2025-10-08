@@ -3,3 +3,8 @@ name: Deploy to Kubernetes
 on:
   push:
     branches: [ no_deploy ]
+    paths-ignore:
+          - 'README.md'
+          - '.gitignore'
+          - '.gitattributes'
+          - 'LICENSE'
