@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8sa-deployment
+  labels:
+    app: k8sa
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8sa
+  template:
+    metadata:
+      labels:
+        app: k8sa
+    spec:
+      containers:
+      - name: kubernetes-scalable-app
+        image: ghcr.io/mghaith/kubernetesscalableapp:latest
+        ports:
+        - containerPort: 5000
+          name: http
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
