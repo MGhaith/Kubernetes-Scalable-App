@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ secrets.DOCKERHUB_USER }}/kubefleet:latest ./app
+        run: docker build -t ghcr.io/${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest ./app
 
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
