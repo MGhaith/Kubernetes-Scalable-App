@@ -49,3 +49,26 @@ jobs:
 
       - name: Push image
         run: docker push ghcr.io/${{ secrets.DOCKERHUB_USER }}/kubefleet:latest
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [build-infra, docker]
+    if: failure()  # only runs if any of jobs fail
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials via OIDC (Terraform)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.TERRAFORM_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Destroy resources
+        working-directory: ./terraform
+        run: |
+          terraform init
+          terraform destroy -auto-approve
