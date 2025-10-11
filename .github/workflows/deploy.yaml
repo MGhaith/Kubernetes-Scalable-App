@@ -26,6 +26,13 @@ jobs:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE_ARN }}
           aws-region: us-east-1
 
+      - name: Deploy Kubernetes Cluster
+        working-directory: ./terraform
+        run: |
+          terraform init
+          terraform plan -out=tfplan
+          terraform apply -auto-approve tfplan
+
   docker:
     runs-on: ubuntu-latest
 
