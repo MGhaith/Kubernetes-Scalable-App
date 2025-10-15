@@ -79,3 +79,32 @@ resource "aws_eks_cluster" "main" {
     Name = "k8s-scallable-app-cluster"
   }
 }
+
+# -------------------------------
+# EKS Node Group
+# -------------------------------
+resource "aws_eks_node_group" "default" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "k8s-scallable-app-nodegroup"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = var.public_subnets
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 2
+    min_size     = 1
+  }
+
+  instance_types = ["t3.small"]
+  ami_type       = "AL2_x86_64"
+
+  depends_on = [
+    aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly
+    ]
+
+  tags = {
+    Name = "k8s-scallable-app-node"
+  }
+}
