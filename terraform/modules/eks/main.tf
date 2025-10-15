@@ -54,3 +54,28 @@ resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryReadOn
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.eks_node_role.name
 }
+
+# -------------------------------
+# EKS Cluster
+# -------------------------------
+
+resource "aws_eks_cluster" "main" {
+  name     = "k8s-scallable-app-eks"
+  role_arn = aws_iam_role.eks_cluster_role.arn
+  version  = "1.34"
+
+  vpc_config {
+    subnet_ids              = var.public_subnets
+    endpoint_public_access  = true
+    endpoint_private_access = false
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.eks_cluster_AmazonEKSVPCResourceController
+  ]
+
+  tags = {
+    Name = "k8s-scallable-app-cluster"
+  }
+}
