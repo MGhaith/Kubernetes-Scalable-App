@@ -7,5 +7,5 @@ module "vpc" {
 
 module "eks" {
   source = "./modules/eks"
-  public_subnets = module.vpc.public_subnets
+  public_subnets = module.vpc.public_subnet_id
 }
